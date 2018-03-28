@@ -1,2 +1,2 @@
-# orenfriedman.net
-The eventual home page for my work replacing the Hugo static site at https://orenfriedman.net
+# CoverMonkey.com
+A place to get commercial insurance quotes quickly with no strings attached!
