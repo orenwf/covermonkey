@@ -1,0 +1,14 @@
+<html>
+    <head>
+      {% if title %}
+      <title>{{ title }} - OrenFriedman.Net</title>
+      {% else %}
+      <title>Welcome to OrenFriedman.Net</title>
+      {% endif %}
+    </head>
+    <body>
+        <div>OrenFriedman.Net: <a href="/index">Home</a></div>
+        <hr>
+        {% block content %}{% endblock %}
+    </body>
+</html>
