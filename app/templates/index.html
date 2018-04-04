@@ -2,9 +2,7 @@
 
 {% block content %}
   <div class="container">
-    <h1>Hi, {{ current_user.username }}!</h1>
-    {% for post in posts %}
-    <div><p>{{ post.author.username }} says: <b>{{ post.body }}</b></p></div>
-    {% endfor %}
+    <h1>Welcome to CoverMonkey!</h1>
+    <div><p><b>The online marketplace for business insurance</b></p></div>
   </div>
 {% endblock %}
