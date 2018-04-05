@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, SelectField, DecimalField, IntegerField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Length
 from app.models import User
 
@@ -44,3 +44,17 @@ class EditProfileForm(FlaskForm):
             user = User.query.filter_by(username=self.username.data).first()
             if user is not None:
                 raise ValidationError('Please use a different username.')
+
+
+class PolicyQuoteForm(FlaskForm):
+    business_type = SelectField('Business type',
+                                choices=[   ('pet_shop', 'Pet store'),
+                                            ('food', 'Restaurant'),
+                                            ('alcohol', 'Bar'),
+                                            ('office', 'Business office'),
+                                            ('grooming', 'Hair salon'),
+                                            ('market', 'Supermarket')   ],
+                                validators=[DataRequired()])
+    limit = DecimalField('Policy Limit', places=2, validators=[DataRequired()])
+    zip_code = IntegerField('Location ZIP', validators=[DataRequired()])
+    submit = SubmitField('Submit')

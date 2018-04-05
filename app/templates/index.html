@@ -1,8 +1,13 @@
 {% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
 
-{% block content %}
+{% block app_content %}
   <div class="container">
     <h1>Welcome to CoverMonkey!</h1>
     <div><p><b>The online marketplace for business insurance</b></p></div>
+    <div class="jumbotron">
+      <h1>Get a quote from the Monkey</h1>
+      {{ wtf.quick_form(form) }}
+    </div>
   </div>
 {% endblock %}

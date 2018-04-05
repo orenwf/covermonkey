@@ -39,6 +39,21 @@ class Post(db.Model):
         return '<Post {}>'.format(self.body)
 
 
+class PolicyInquiry(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    business = db.Column(db.String(140))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    zip_code = db.Column(db.Integer)
+    limit = db.Column(db.Float)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    def __repr__(self):
+        return '<Inquiry {}, {}, {}, {}>'.format(self.timestamp,
+                                                 self.business,
+                                                 self.zip_code,
+                                                 self.limit)
+
+
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))

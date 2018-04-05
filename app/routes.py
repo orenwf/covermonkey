@@ -1,21 +1,36 @@
 from app import app, db
-from app.forms import LoginForm, RegistrationForm, EditProfileForm
-from app.models import User
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, PolicyQuoteForm
+from app.models import User, PolicyInquiry
 from datetime import datetime
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 
 
-@app.route('/')
-@app.route('/index')
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/index', methods=['GET', 'POST'])
 def index():
-    return render_template('index.html', title='Home')
+    form = PolicyQuoteForm()
+    if form.validate_on_submit():
+        inquiry = PolicyInquiry(business=form.business_type.data,
+                                zip_code=form.zip_code.data,
+                                limit=form.limit.data)
+        if not current_user.is_authenticated:
+            flash('Please log in to get a quote')
+            return redirect(url_for('login'))
+        inquiry.user_id = current_user.id
+        db.session.add(inquiry)
+        db.session.commit()
+        flash('Thank you for your inquiry')
+        return redirect(url_for('dashboard'))
+    return render_template('index.html', title='Home', form=form)
+
 
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    return render_template('dashboard.html')
+    return render_template('dashboard.html', title='Dashboard')
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
