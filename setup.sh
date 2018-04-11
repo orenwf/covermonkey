@@ -1,13 +1,15 @@
 #!/usr/bin/env sh
 
-export FLASK_APP=covermonkey.py
-echo "set FLASK_APP=$FLASK_APP"
+TITLE='[CoverMonkey Setup]:'
 
-if ![-e app.db] && ![-d migrations]
+export FLASK_APP=covermonkey.py
+echo "$TITLE set FLASK_APP=$FLASK_APP"
+
+if [ ! -e "app.db" ] && [ ! -d "migrations" ]
 then
 	flask db init
 	flask db migrate -m "initial"
 	flask db upgrade
 else
-	echo 'db file already exists'
+	echo "$TITLE db file already exists"
 fi
