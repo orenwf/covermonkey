@@ -1,11 +1,18 @@
 #!/usr/bin/env sh
 
-sudo apt update
-sudo apt install python3 python3-venv
+MYPYTHON=python3
+
+if [ lsb_release -d | grep -q 'Ubuntu.*14.04' ]
+then
+	sudo add-apt-repository ppa:deadsnakes/ppa
+	sudo apt-get update
+	sudo apt-get install python3.6
+	MYPYTHON=python3.6
+fi
 
 if [ ! -d "venv" ]
 then
-	python3 -m venv venv
+	$MYPYTHON -m venv venv
 else
 	echo 'venv already exists'
 fi
