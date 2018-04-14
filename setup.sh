@@ -2,7 +2,7 @@
 
 MYPYTHON=python3
 
-if [ lsb_release -d | grep -q 'Ubuntu.*14.04' ]
+if lsb_release -d | grep -q 'Ubuntu.*16.04' 
 then
 	sudo add-apt-repository ppa:deadsnakes/ppa
 	sudo apt-get update
