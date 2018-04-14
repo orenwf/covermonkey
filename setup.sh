@@ -12,17 +12,7 @@ else
 	echo 'venv already exists'
 fi
 
-sudo apt install git
-
-if [ ! -d "covermonkey" ]
-then
-	git clone https://github.com/orenwf/covermonkey.git
-else
-	echo 'covermonkey already exists'
-fi
-
-source venv/bin/activate
-cd covermonkey
+source ~/venv/bin/activate
 pip install -r requirements.txt
 
 TITLE='[CoverMonkey Setup]:'
