@@ -39,7 +39,6 @@ else
 	echo "$TITLE db file and migrations directory already exist"
 fi
 
-gunicorn -D -b 0.0.0.0:8000 covermonkey:app
+# TODO set up supervisor to run gunicorn
+gunicorn -b 0.0.0.0:8000 covermonkey:app
 echo 'Covermonkey listening on port 8000'
-deactivate
-cd -
