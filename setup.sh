@@ -38,4 +38,6 @@ else
 	echo "$TITLE db file already exists"
 fi
 
-gunicorn -b localhost:8000 covermonkey:app
+gunicorn -D -b 0.0.0.0:8000 covermonkey:app
+cd ..
+echo 'Covermonkey listening on port 8000'
