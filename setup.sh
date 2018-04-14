@@ -1,19 +1,20 @@
 #!/usr/bin/env sh
 
-# https://launchpad.net/~deadsnakes/+archive/ubuntu/ppa
-sudo add-apt-repository ppa:deadsnakes/ppa
 sudo apt update
-sudo apt install python3.6 python3.6-venv
+sudo apt install python3 python3-venv
 
 if [ ! -d "venv" ]
 then
-	python3.6 -m venv venv
+	python3 -m venv venv
 else
 	echo 'venv already exists'
 fi
 
-source ~/venv/bin/activate
+pip install -U pip
+source venv/bin/activate
+cd covermonkey
 pip install -r requirements.txt
+pip install gunicorn
 
 TITLE='[CoverMonkey Setup]:'
 
@@ -29,5 +30,4 @@ else
 	echo "$TITLE db file already exists"
 fi
 
-pip install gunicorn
 gunicorn -b localhost:8000 covermonkey:app
