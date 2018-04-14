@@ -40,5 +40,6 @@ else
 fi
 
 gunicorn -D -b 0.0.0.0:8000 covermonkey:app
-cd -
 echo 'Covermonkey listening on port 8000'
+deactivate
+cd -
