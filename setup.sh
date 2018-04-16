@@ -30,7 +30,7 @@ sudo $PACKAGEMGR install python2 python2-pip
 pip2 install -U pip --user
 pip2 install supervisor --user
 
-echo -e "[program:covermonkey]\ncommand=~/venv/bin/gunicorn -b 0.0.0.0:8000 covermonkey:app\ndirectory=~/covermonkey\nuser=$USER\nautostart=true\nautorestart=true\nstopasgroup=true\nkillasgroup=true" > /etc/supervisor/conf.d/covermonkey.conf
+sudo echo -e "[program:covermonkey]\ncommand=~/venv/bin/gunicorn -b 0.0.0.0:8000 covermonkey:app\ndirectory=~/covermonkey\nuser=$USER\nautostart=true\nautorestart=true\nstopasgroup=true\nkillasgroup=true" > /etc/supervisor/conf.d/covermonkey.conf
 
 source venv/bin/activate
 cd covermonkey
