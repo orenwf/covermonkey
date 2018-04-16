@@ -1,17 +1,17 @@
 #!/usr/bin/env sh
 
 TITLE='[CoverMonkey Setup]:'
-PACKAGEMGR=undefined
+PACKAGEMGR=apt
 
-if lsb_release -d
-then
-	PACKAGEMGR=apt
-else
-	PACKAGEMGR=yum
-fi
+#if lsb_release -d
+#then
+#	PACKAGEMGR=apt
+#else
+#	PACKAGEMGR=yum
+#fi
 
 sudo $PACKAGEMGR update
-sudo $PACKAGEMGR install python3 python3-pip
+sudo $PACKAGEMGR install python3 python3-venv
 python3 -m pip install -U pip --user
 
 if [ ! -d "venv" ]
@@ -21,9 +21,9 @@ else
 	echo 'venv already exists'
 fi
 
-sudo $PACKAGEMGR install python2 python2-pip
-python2 -m pip install -U pip --user
-python2 -m pip install supervisor --user
+sudo $PACKAGEMGR install python python-pip
+python -m pip install -U pip --user
+python -m pip install supervisor --user
 
 mkdir -p supervisor/conf.d
 echo_supervisord_conf > supervisor/conf.d/covermonkey.conf
@@ -35,8 +35,8 @@ sudo $PACKAGEMGR install nginx
 sudo rm /etc/nginx/sites-enabled/default
 sudo cp nginx.covermonkey /etc/nginx/sites-enabled/covermonkey
 
-mkdir certs
-openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 -keyout certs/key.pem -out certs/certs.pem
+mkdir covermonkey/certs
+openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 -keyout covermonkey/certs/key.pem -out covermonkey/certs/certs.pem
 
 source venv/bin/activate
 cd covermonkey
