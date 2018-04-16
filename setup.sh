@@ -26,12 +26,20 @@ python2 -m pip install -U pip --user
 python2 -m pip install supervisor --user
 
 mkdir -p supervisor/conf.d
-echo -e "[program:covermonkey]\ncommand=$HOME/venv/bin/gunicorn -b 0.0.0.0:8000 covermonkey:app\ndirectory=$HOME/covermonkey\nuser=$USER\nautostart=true\nautorestart=true\nstopasgroup=true\nkillasgroup=true" > supervisor/conf.d/covermonkey.conf
+echo_supervisord_conf > supervisor/conf.d/covermonkey.conf
+echo -e "[program:covermonkey]\ncommand=$HOME/venv/bin/gunicorn -b localhost:8000 covermonkey:app\ndirectory=$HOME/covermonkey\nuser=$USER\nautostart=true\nautorestart=true\nstopasgroup=true\nkillasgroup=true" >> supervisor/conf.d/covermonkey.conf
 sudo mv supervisor /etc/
 supervisord -c /etc/supervisor/conf.d/covermonkey.conf
 
-source venv/bin/activate
+sudo $PACKAGEMGR install nginx
+sudo rm /etc/nginx/sites-enabled/default
+sudo cp nginx.covermonkey /etc/nginx/sites-enabled/covermonkey
+
 cd covermonkey
+mkdir certs
+openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 -keyout certs/key.pem -out certs/certs.pem
+
+source venv/bin/activate
 pip3 install -r requirements.txt
 
 export FLASK_APP='covermonkey.py'
@@ -47,4 +55,5 @@ else
 fi
 
 supervisorctl reload
+sudo service nginx reload
 echo 'Covermonkey listening on port 8000'
