@@ -1,28 +1,22 @@
 #!/usr/bin/env sh
 
 TITLE='[CoverMonkey Setup]:'
-MYPYTHON=python3
-PACKAGEMGR=yum
+PACKAGEMGR=undefined
 
-if lsb_release -d | grep -q 'Ubuntu.*16.04' 
+if lsb_release -d
 then
-	MYPYTHON=python3.6
 	PACKAGEMGR=apt
-	echo "$TITLE installing Python3.6 and pip"
-	sudo add-apt-repository ppa:deadsnakes/ppa
-	sudo $PACKAGEMGR update
-	sudo $PACKAGEMGR install python3.6 python3-pip
 else
-	echo 'Not on Ubuntu 16.04'
-	sudo $PACKAGEMGR update
-	sudo $PACKAGEMGR install python3 python3-pip
+	PACKAGEMGR=yum
 fi
 
+sudo $PACKAGEMGR update
+sudo $PACKAGEMGR install python3 python3-pip
 python3 -m pip install -U pip --user
 
 if [ ! -d "venv" ]
 then
-	$MYPYTHON -m venv venv
+	python3 -m venv venv
 else
 	echo 'venv already exists'
 fi
