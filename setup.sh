@@ -17,7 +17,7 @@ else
 fi
 
 sudo $PACKAGEMGR install python3-pip
-pip3 install -U pip --user
+python3 -m pip install -U pip --user
 
 if [ ! -d "venv" ]
 then
@@ -27,9 +27,10 @@ else
 fi
 
 sudo $PACKAGEMGR install python2 python2-pip
-pip2 install -U pip --user
-pip2 install supervisor --user
+python2 -m pip install -U pip --user
+pyhon3 -m pip install supervisor --user
 
+sudo mkdir -p /etc/supervisor/conf.d
 sudo echo -e "[program:covermonkey]\ncommand=~/venv/bin/gunicorn -b 0.0.0.0:8000 covermonkey:app\ndirectory=~/covermonkey\nuser=$USER\nautostart=true\nautorestart=true\nstopasgroup=true\nkillasgroup=true" > /etc/supervisor/conf.d/covermonkey.conf
 
 source venv/bin/activate
