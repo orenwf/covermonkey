@@ -28,6 +28,7 @@ python2 -m pip install supervisor --user
 mkdir -p supervisor/conf.d
 echo -e "[program:covermonkey]\ncommand=$HOME/venv/bin/gunicorn -b 0.0.0.0:8000 covermonkey:app\ndirectory=$HOME/covermonkey\nuser=$USER\nautostart=true\nautorestart=true\nstopasgroup=true\nkillasgroup=true" > supervisor/conf.d/covermonkey.conf
 sudo mv supervisor /etc/
+supervisord -c /etc/supervisor/conf.d/covermonkey.conf
 
 source venv/bin/activate
 cd covermonkey
