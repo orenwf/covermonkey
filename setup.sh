@@ -11,14 +11,13 @@ then
 	echo "$TITLE installing Python3.6 and pip"
 	sudo add-apt-repository ppa:deadsnakes/ppa
 	sudo $PACKAGEMGR update
-	sudo $PACKAGEMGR install python3.6
+	sudo $PACKAGEMGR install python3.6 python3-pip
 else
 	echo 'Not on Ubuntu 16.04'
 	sudo $PACKAGEMGR update
-	sudo $PACKAGEMGR install python3 
+	sudo $PACKAGEMGR install python3 python3-pip
 fi
 
-sudo $PACKAGEMGR install python3-pip
 python3 -m pip install -U pip --user
 
 if [ ! -d "venv" ]
