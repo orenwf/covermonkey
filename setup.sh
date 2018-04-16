@@ -10,9 +10,11 @@ then
 	PACKAGEMGR=apt
 	echo "$TITLE installing Python3.6 and pip"
 	sudo add-apt-repository ppa:deadsnakes/ppa
+	sudo $PACKAGEMGR update
 	sudo $PACKAGEMGR install python3.6
 else
 	echo 'Not on Ubuntu 16.04'
+	sudo $PACKAGEMGR update
 	sudo $PACKAGEMGR install python3 
 fi
 
