@@ -35,11 +35,11 @@ sudo $PACKAGEMGR install nginx
 sudo rm /etc/nginx/sites-enabled/default
 sudo cp nginx.covermonkey /etc/nginx/sites-enabled/covermonkey
 
-cd covermonkey
 mkdir certs
 openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 -keyout certs/key.pem -out certs/certs.pem
 
 source venv/bin/activate
+cd covermonkey
 pip3 install -r requirements.txt
 
 export FLASK_APP='covermonkey.py'
@@ -56,4 +56,5 @@ fi
 
 supervisorctl reload
 sudo service nginx reload
+cd
 echo 'Covermonkey listening on port 8000'
