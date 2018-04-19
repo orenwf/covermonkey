@@ -3,5 +3,22 @@
 {% block app_content %}
   <div class="container">
     <h1>Hi, {{ current_user.username }}!</h1>
+    <div class="jumbotron">
+	<h1>Policies</h1>
+	{% for policy in current_user.policies %}
+	<p>
+	    Risk: {{ policy.offer_id.risk }} with Limit: {{ policy.offer_id.limit }}
+	</p>
+	<p>
+	Binding: {{ policy.timestamp }} from {{ policy.insurer_id }}
+	</p>
+	{% endfor %}
+	<h1>Inquiries</h1>
+        {% for inquiry in current_user.inquiries %}
+	<p>
+	    Risk: {{ inquiry.risk }} with Limit: {{ inquiry.limit }}
+	</p>
+	{% endfor %}
+    </div>
   </div>
 {% endblock %}

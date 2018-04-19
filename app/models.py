@@ -13,6 +13,12 @@ class User(UserMixin, db.Model):
     posts = db.relationship('Post', backref='author', lazy='dynamic')
     about_me = db.Column(db.String(140))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
+    inquiries = db.relationship('PolicyInquiry',
+                                backref='inquirer',
+                                lazy='dynamic')
+    policies = db.relationship('PolicyAgreement',
+                               backref='holder',
+                               lazy='dynamic')
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -25,8 +31,19 @@ class User(UserMixin, db.Model):
 
     def avatar(self, size):
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
-        return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}' \
-               .format(digest, size)
+        r = 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'
+        return r.format(digest, size)
+
+
+class Insurer(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), index=True, unique=True)
+    policies = db.relationship('PolicyAgreement',
+                               backref='insurer',
+                               lazy='dynamic')
+
+    def __repr__(self):
+        return '<Insurer {}>'.format(self.name)
 
 
 class Post(db.Model):
@@ -41,17 +58,42 @@ class Post(db.Model):
 
 class PolicyInquiry(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    business = db.Column(db.String(140))
+    risk = db.Column(db.String(140))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     zip_code = db.Column(db.Integer)
     limit = db.Column(db.Float)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    offers = db.relationship('PolicyOffer', backref='inquiry', lazy='dynamic')
 
     def __repr__(self):
         return '<Inquiry {}, {}, {}, {}>'.format(self.timestamp,
-                                                 self.business,
+                                                 self.risk,
                                                  self.zip_code,
                                                  self.limit)
+
+
+class PolicyOffer(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    risk = db.Column(db.String(140))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    premium = db.Column(db.Float)
+    limit = db.Column(db.Float)
+    inquiry_id = db.Column(db.Integer, db.ForeignKey('policy_inquiry.id'))
+
+    def __repr__(self):
+        return '<Offer {}, {}, {}, {}>'.format(self.timestamp,
+                                               self.risk,
+                                               self.premium,
+                                               self.limit)
+
+
+class PolicyAgreement(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    insurer_id = db.Column(db.Integer, db.ForeignKey('insurer.id'))
+    offer_id = db.Column(db.Integer, db.ForeignKey('policy_offer.id'))
+    inquiry_id = db.Column(db.Integer, db.ForeignKey('policy_inquiry.id'))
 
 
 @login.user_loader

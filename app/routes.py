@@ -12,7 +12,7 @@ from werkzeug.urls import url_parse
 def index():
     form = PolicyQuoteForm()
     if form.validate_on_submit():
-        inquiry = PolicyInquiry(business=form.business_type.data,
+        inquiry = PolicyInquiry(risk=form.business_type.data,
                                 zip_code=form.zip_code.data,
                                 limit=form.limit.data)
         if not current_user.is_authenticated:

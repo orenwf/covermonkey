@@ -21,22 +21,22 @@ else
 	echo 'venv already exists'
 fi
 
-sudo $PACKAGEMGR install python python-pip
-python -m pip install -U pip --user
-python -m pip install supervisor --user
+#sudo $PACKAGEMGR install python python-pip
+#python -m pip install -U pip --user
+#python -m pip install supervisor --user
 
-mkdir -p supervisor/conf.d
-echo_supervisord_conf > supervisor/conf.d/covermonkey.conf
-echo -e "[program:covermonkey]\ncommand=$HOME/venv/bin/gunicorn -b localhost:8000 covermonkey:app\ndirectory=$HOME/covermonkey\nuser=$USER\nautostart=true\nautorestart=true\nstopasgroup=true\nkillasgroup=true" >> supervisor/conf.d/covermonkey.conf
-sudo mv supervisor /etc/
-supervisord -c /etc/supervisor/conf.d/covermonkey.conf
+#mkdir -p supervisor/conf.d
+#echo_supervisord_conf > supervisor/conf.d/covermonkey.conf
+#echo -e "[program:covermonkey]\ncommand=$HOME/venv/bin/gunicorn -b localhost:8000 covermonkey:app\ndirectory=$HOME/covermonkey\nuser=$USER\nautostart=true\nautorestart=true\nstopasgroup=true\nkillasgroup=true" >> supervisor/conf.d/covermonkey.conf
+#sudo mv supervisor /etc/
+#supervisord -c /etc/supervisor/conf.d/covermonkey.conf
 
-sudo $PACKAGEMGR install nginx
-sudo rm /etc/nginx/sites-enabled/default
-sudo cp nginx.covermonkey /etc/nginx/sites-enabled/covermonkey
+#sudo $PACKAGEMGR install nginx
+#sudo rm /etc/nginx/sites-enabled/default
+#sudo cp nginx.covermonkey /etc/nginx/sites-enabled/covermonkey
 
-mkdir covermonkey/certs
-openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 -keyout covermonkey/certs/key.pem -out covermonkey/certs/certs.pem
+#mkdir covermonkey/certs
+#openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 -keyout covermonkey/certs/key.pem -out covermonkey/certs/certs.pem
 
 source venv/bin/activate
 cd covermonkey
@@ -50,11 +50,13 @@ then
 	flask db init
 	flask db migrate -m "initial"
 	flask db upgrade
+	python3 init_db.py
 else
 	echo "$TITLE db file and migrations directory already exist"
 fi
 
-supervisorctl reload
-sudo service nginx reload
+#supervisorctl reload
+#sudo service nginx reload
 cd
-echo 'Covermonkey listening on port 8000'
+gunicorn -b 0.0.0.0:8000 covermonkey:app
+#echo 'Covermonkey listening on port 8000'
